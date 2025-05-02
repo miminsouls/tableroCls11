@@ -7,10 +7,11 @@ def set_lana_del_rey_theme():
     st.markdown("""
         <style>
         body {
-            background-image: url('https://www.example.com/lanadelrey-background.jpg');
+            background-image: url('https://www.example.com/lanadelrey-background.jpg'); /* Cambia por el enlace de la imagen */
             background-size: cover;
             background-position: center;
             color: white;
+            font-family: 'Cinzel', serif;
         }
         .streamlit-expanderHeader {
             font-family: 'Cinzel', serif;
@@ -33,6 +34,14 @@ def set_lana_del_rey_theme():
             color: #6C3483;
             border: 2px solid #6C3483;
         }
+        .stTextInput>label {
+            color: #F5B7B1;
+        }
+        .stTextInput>div>input {
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            color: #6C3483;
+        }
         </style>
     """, unsafe_allow_html=True)
 
@@ -48,5 +57,5 @@ set_lana_del_rey_theme()
 st.title("Lana del Rey Inspired App")
 st.write("Bienvenido a mi aplicación con la vibra de Lana del Rey. Disfruta de la magia y el glamour de sus canciones.")
 
-# Tu código existente aquí
-st.write("Este es un ejemplo de personalización manteniendo la funcionalidad.")
+# Cargar imagen relacionada con Lana del Rey (si tienes una imagen propia, cámbiala)
+image_url = "_
