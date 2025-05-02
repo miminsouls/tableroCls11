@@ -13,7 +13,6 @@ st.image(image, use_column_width=True)
 
 # Configuración del lienzo
 st.sidebar.header("Configuración del Lienzo")
-brush_color = st.sidebar.color_picker("Color del pincel", "#000000")
 brush_size = st.sidebar.slider("Tamaño del pincel", 1, 10, 5)
 clear_button = st.sidebar.button("Limpiar Lienzo")
 
@@ -44,4 +43,3 @@ canvas_result = st_canvas(
 # Limpiar el lienzo
 if clear_button:
     canvas_result.clear()
-
