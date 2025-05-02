@@ -1,110 +1,44 @@
 import streamlit as st
 from PIL import Image
 import numpy as np
-import cv2  # Necesario para el manejo de imágenes y dibujo
 
-# Definir una función para cambiar el tema
-def set_lana_del_rey_theme():
-    # Cambiar el fondo de la aplicación (puedes agregar tu propia imagen aquí)
-    st.markdown("""
-        <style>
-        body {
-            background-image: url('https://www.example.com/lanadelrey-background.jpg'); /* Cambia por el enlace de la imagen */
-            background-size: cover;
-            background-position: center;
-            color: white;
-            font-family: 'Cinzel', serif;
-        }
-        .streamlit-expanderHeader {
-            font-family: 'Cinzel', serif;
-        }
-        .css-1v3fvcr {
-            font-family: 'Lobster', cursive;
-            color: #F5B7B1;
-        }
-        .stButton > button {
-            background-color: #6C3483;
-            color: white;
-            font-family: 'Cinzel', serif;
-            border: 2px solid #F5B7B1;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .stButton > button:hover {
-            background-color: #F5B7B1;
-            color: #6C3483;
-            border: 2px solid #6C3483;
-        }
-        .stTextInput>label {
-            color: #F5B7B1;
-        }
-        .stTextInput>div>input {
-            background-color: rgba(255, 255, 255, 0.6);
-            border-radius: 8px;
-            color: #6C3483;
-        }
-        </style>
-    """, unsafe_allow_html=True)
+# Título y descripción
+st.title("Tablero de Dibujo - Lana Del Rey")
+st.write("¡Bienvenido! Usa el tablero para dibujar y expresarte al estilo de Lana Del Rey.")
 
-# Cargar fuente de Google Fonts (si es necesario)
-st.markdown("""
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Cinzel&display=swap" rel="stylesheet">
-""", unsafe_allow_html=True)
-
-# Aplicar el tema
-set_lana_del_rey_theme()
-
-# Cargar el título y descripción
-st.title("Lana del Rey Inspired App")
-st.write("Bienvenido a mi aplicación con la vibra de Lana del Rey. Disfruta de la magia y el glamour de sus canciones.")
-
-# Cargar imagen relacionada con Lana del Rey desde un archivo local
-image_path = "lana del rey american flag.jpg"  # Ruta del archivo de imagen en tu directorio
-
-# Cargar la imagen
+# Cargar y mostrar la imagen de fondo
+image_path = "lana del rey american flag.jpg"  # Imagen de fondo
 image = Image.open(image_path)
-
-# Mostrar la imagen
-st.image(image, caption='Lana del Rey', use_column_width=True)
-
-# Agregar una pequeña descripción de Lana del Rey
-st.subheader("Sobre Lana del Rey")
-st.write("""
-Lana Del Rey es una cantante, compositora y productora estadounidense conocida por sus letras melancólicas, su estilo musical que fusiona pop, rock y música electrónica, y su estética retro inspirada en la cultura americana. Sus canciones están llenas de nostalgia, romance y un toque de tragedia.
-
-Algunos de sus álbumes más conocidos incluyen "Born to Die", "Ultraviolence" y "Norman Fucking Rockwell!".
-""")
-
-# Ahora, implementamos el tablero de dibujo
+st.image(image, use_column_width=True)
 
 # Configuración del lienzo
-st.subheader("¡Haz tu propio dibujo!")
+st.sidebar.header("Configuración del Lienzo")
+brush_color = st.sidebar.color_picker("Color del pincel", "#000000")
+brush_size = st.sidebar.slider("Tamaño del pincel", 1, 10, 5)
+clear_button = st.sidebar.button("Limpiar Lienzo")
+
+# Crear el lienzo con un fondo blanco
 canvas_width = 700
-canvas_height = 500
+canvas_height = 400
 
-# Usar la funcionalidad de dibujo (canvas)
-drawing = st.empty()
+# Establecer el lienzo
+if 'drawn_image' not in st.session_state:
+    # Crear una imagen blanca de fondo en formato RGBA (con canal alfa)
+    blank_image = Image.new("RGBA", (canvas_width, canvas_height), (255, 255, 255, 255))
+    st.session_state.drawn_image = blank_image
 
-# Crear un lienzo en blanco para que el usuario pueda dibujar
-canvas = np.zeros((canvas_height, canvas_width, 3), dtype=np.uint8)
+# Mostrar el lienzo
+st.image(st.session_state.drawn_image, width=canvas_width)
 
-# Mostrar el lienzo en la aplicación
-st.image(canvas, caption="Tu dibujo", use_column_width=True)
+# Funcionalidad para dibujar en el lienzo
+def draw_on_canvas(image, color, size):
+    # Crear una imagen sobre la que se dibuja
+    img_array = np.array(image)
+    brush = np.array([int(x, 16) for x in color[1:]]).reshape((1, 1, 3))
+    img_array[:size, :size] = brush
+    return Image.fromarray(img_array)
 
-# Establecer el lápiz de dibujo
-color = (255, 0, 0)  # color rojo para el lápiz
-brush_size = 10  # tamaño de pincel
+# Limpiar el lienzo
+if clear_button:
+    st.session_state.drawn_image = Image.new("RGBA", (canvas_width, canvas_height), (255, 255, 255, 255))
 
-# Función para dibujar en el lienzo
-def draw_on_canvas(x, y, color, brush_size):
-    cv2.circle(canvas, (x, y), brush_size, color, -1)
-
-# Obtener las coordenadas de clic en el lienzo (esto se logra con una interacción con la app)
-x, y = st.slider("Posición X", 0, canvas_width), st.slider("Posición Y", 0, canvas_height)
-draw_on_canvas(x, y, color, brush_size)
-
-# Ejemplo de cómo guardar el dibujo en un archivo
-if st.button("Guardar mi dibujo"):
-    Image.fromarray(canvas).save("mi_dibujo.png")
-    st.write("¡Tu dibujo ha sido guardado!")
