@@ -58,4 +58,32 @@ st.title("Lana del Rey Inspired App")
 st.write("Bienvenido a mi aplicación con la vibra de Lana del Rey. Disfruta de la magia y el glamour de sus canciones.")
 
 # Cargar imagen relacionada con Lana del Rey (si tienes una imagen propia, cámbiala)
-image_url = "_
+image_url = "https://upload.wikimedia.org/wikipedia/commons/2/28/Lana_Del_Rey_2019_by_Glenn_Francis.jpg"
+image = Image.open(image_url)
+st.image(image, caption='Lana del Rey', use_column_width=True)
+
+# Agregar una pequeña descripción de Lana del Rey
+st.subheader("Sobre Lana del Rey")
+st.write("""
+Lana Del Rey es una cantante, compositora y productora estadounidense conocida por sus letras melancólicas, su estilo musical que fusiona pop, rock y música electrónica, y su estética retro inspirada en la cultura americana. Sus canciones están llenas de nostalgia, romance y un toque de tragedia.
+
+Algunos de sus álbumes más conocidos incluyen "Born to Die", "Ultraviolence" y "Norman Fucking Rockwell!".
+""")
+
+# Ejemplo de una función interactiva manteniendo la funcionalidad del script original
+st.subheader("Interacción con la app")
+user_input = st.text_input("Escribe algo aquí... (ejemplo: 'Born to Die', 'Summertime Sadness')")
+
+# Mostrar un mensaje dependiendo del input
+if user_input:
+    st.write(f"¡Has escrito: {user_input}!")
+    if user_input.lower() == 'born to die':
+        st.write("¡Qué bien! 'Born to Die' es uno de los discos más emblemáticos de Lana del Rey.")
+    elif user_input.lower() == 'summertime sadness':
+        st.write("¡Ah, 'Summertime Sadness' es todo un himno! Qué gran canción.")
+    else:
+        st.write("¡Buen gusto! Lana tiene muchas canciones increíbles.")
+else:
+    st.write("Escribe algo en el campo de texto para interactuar.")
+
+# Puedes incluir más secciones aquí, como botones, gráficos, etc.
