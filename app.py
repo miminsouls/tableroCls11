@@ -1,5 +1,7 @@
 import streamlit as st
 from PIL import Image
+import numpy as np
+import cv2  # Necesario para el manejo de imágenes y dibujo
 
 # Definir una función para cambiar el tema
 def set_lana_del_rey_theme():
@@ -74,20 +76,35 @@ Lana Del Rey es una cantante, compositora y productora estadounidense conocida p
 Algunos de sus álbumes más conocidos incluyen "Born to Die", "Ultraviolence" y "Norman Fucking Rockwell!".
 """)
 
-# Ejemplo de una función interactiva manteniendo la funcionalidad del script original
-st.subheader("Interacción con la app")
-user_input = st.text_input("Escribe algo aquí... (ejemplo: 'Born to Die', 'Summertime Sadness')")
+# Ahora, implementamos el tablero de dibujo
 
-# Mostrar un mensaje dependiendo del input
-if user_input:
-    st.write(f"¡Has escrito: {user_input}!")
-    if user_input.lower() == 'born to die':
-        st.write("¡Qué bien! 'Born to Die' es uno de los discos más emblemáticos de Lana del Rey.")
-    elif user_input.lower() == 'summertime sadness':
-        st.write("¡Ah, 'Summertime Sadness' es todo un himno! Qué gran canción.")
-    else:
-        st.write("¡Buen gusto! Lana tiene muchas canciones increíbles.")
-else:
-    st.write("Escribe algo en el campo de texto para interactuar.")
+# Configuración del lienzo
+st.subheader("¡Haz tu propio dibujo!")
+canvas_width = 700
+canvas_height = 500
 
-# Puedes incluir más secciones aquí, como botones, gráficos, etc.
+# Usar la funcionalidad de dibujo (canvas)
+drawing = st.empty()
+
+# Crear un lienzo en blanco para que el usuario pueda dibujar
+canvas = np.zeros((canvas_height, canvas_width, 3), dtype=np.uint8)
+
+# Mostrar el lienzo en la aplicación
+st.image(canvas, caption="Tu dibujo", use_column_width=True)
+
+# Establecer el lápiz de dibujo
+color = (255, 0, 0)  # color rojo para el lápiz
+brush_size = 10  # tamaño de pincel
+
+# Función para dibujar en el lienzo
+def draw_on_canvas(x, y, color, brush_size):
+    cv2.circle(canvas, (x, y), brush_size, color, -1)
+
+# Obtener las coordenadas de clic en el lienzo (esto se logra con una interacción con la app)
+x, y = st.slider("Posición X", 0, canvas_width), st.slider("Posición Y", 0, canvas_height)
+draw_on_canvas(x, y, color, brush_size)
+
+# Ejemplo de cómo guardar el dibujo en un archivo
+if st.button("Guardar mi dibujo"):
+    Image.fromarray(canvas).save("mi_dibujo.png")
+    st.write("¡Tu dibujo ha sido guardado!")
