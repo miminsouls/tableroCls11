@@ -57,9 +57,13 @@ set_lana_del_rey_theme()
 st.title("Lana del Rey Inspired App")
 st.write("Bienvenido a mi aplicación con la vibra de Lana del Rey. Disfruta de la magia y el glamour de sus canciones.")
 
-# Cargar imagen relacionada con Lana del Rey (si tienes una imagen propia, cámbiala)
-image_url = "https://upload.wikimedia.org/wikipedia/commons/2/28/Lana_Del_Rey_2019_by_Glenn_Francis.jpg"
-image = Image.open(image_url)
+# Cargar imagen relacionada con Lana del Rey desde un archivo local
+image_path = "lana del rey american flag.jpg"  # Ruta del archivo de imagen en tu directorio
+
+# Cargar la imagen
+image = Image.open(image_path)
+
+# Mostrar la imagen
 st.image(image, caption='Lana del Rey', use_column_width=True)
 
 # Agregar una pequeña descripción de Lana del Rey
